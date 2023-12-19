@@ -1,17 +1,18 @@
 ## Результаты
 ```
-Run #1: par took 6503ms
-Run #1: seq took 21829ms
-Run #2: par took 6069ms
-Run #2: seq took 21585ms
-Run #3: par took 6184ms
-Run #3: seq took 21687ms
-Run #4: par took 6400ms
-Run #4: seq took 21856ms
-Run #5: par took 6264ms
-Run #5: seq took 21620ms
-Average parallel result: 6284ms
-Average sequential result: 21715.4ms
+Run #1: par took 6903ms
+Run #1: seq took 22530ms
+Run #2: par took 6410ms
+Run #2: seq took 23037ms
+Run #3: par took 6456ms
+Run #3: seq took 22566ms
+Run #4: par took 6738ms
+Run #4: seq took 22799ms
+Run #5: par took 6776ms
+Run #5: seq took 22613ms
+Average parallel result: 6656.6ms
+Average sequential result: 22709ms
+Boost: 3.4115
 ```
 
 ## Как запускалось локально

@@ -4,6 +4,7 @@
 #include <chrono>
 #include <random>
 #include <omp.h>
+#include <cassert>
 
 const int NUM_THREADS = 4;
 const int ARRAY_SIZE = 1e8;
@@ -38,7 +39,7 @@ int partition(std::vector<int> &a, int l, int r) {
 void SequentialQuickSort(std::vector<int> &a, int l, int r) {
     if (l < r) {
         int q = partition(a, l, r);
-        SequentialQuickSort(a, l, q - 1);
+        SequentialQuickSort(a, l, q);
         SequentialQuickSort(a, q + 1, r);
     }
 }
@@ -49,7 +50,7 @@ void SubParallelQuickSort(std::vector<int> &a, int l, int r) {
     } else {
         int q = partition(a, l, r);
 #pragma omp task shared(a)
-        SubParallelQuickSort(a, l, q - 1);
+        SubParallelQuickSort(a, l, q);
 #pragma omp task shared(a)
         SubParallelQuickSort(a, q + 1, r);
     }
@@ -89,10 +90,20 @@ void Experiment() {
         std::cout << "Run #" << run << ": seq took "
                   << std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count() << "ms" << std::endl;
         sequential_duration += std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count();
+
+        for (int i = 0; i < a.size(); ++i) {
+            assert(a[i] == b[i]);
+            if (i > 0) {
+                assert(a[i] >= a[i-1]);
+            }
+        }
     }
 
-    std::cout << "Average parallel result: " << double(parallel_duration) / double(RUNS) << "ms\n";
-    std::cout << "Average sequential result: " << double(sequential_duration) / double(RUNS) << "ms\n";
+    double average_parallel_result = double(parallel_duration) / double(RUNS);
+    std::cout << "Average parallel result: " << average_parallel_result << "ms\n";
+    double average_sequential_result = double(sequential_duration) / double(RUNS);
+    std::cout << "Average sequential result: " << average_sequential_result << "ms\n";
+    std::cout << "Boost: " << average_sequential_result / average_parallel_result << "\n";
 }
 
 int main() {
